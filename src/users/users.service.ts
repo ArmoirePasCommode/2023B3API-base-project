@@ -24,8 +24,8 @@ export class UsersService {
   }
 
 
-  async findByUsername(username: string): Promise<User | null> {
-    return await this.userRepository.findOne({ where: { username: username } });
+  async findByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOne({ where: { email } });
   }
 
   async hashPassword(password: string): Promise<string> {

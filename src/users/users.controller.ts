@@ -22,6 +22,8 @@ import { User } from './entities/user.entity';
 import { AuthService } from './auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { LoggingInterceptor } from './interceptors/password.interceptors';
+
+
 @Controller('users')
 @UseInterceptors(LoggingInterceptor)
 export class UsersController {
@@ -36,16 +38,13 @@ export class UsersController {
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
+  
   //Route de login
   @Post('auth/login')
-  async login(
-    @Body() loginuserdto: LoginUserDto,
-  ): Promise<{ access_token: string }> {
-    return this.authservice.signIn(
-      loginuserdto.username,
-      loginuserdto.password,
-    );
+  async login(@Body() dto: LoginUserDto): Promise<{ access_token: string }> {
+    return this.authservice.signIn(dto)
   }
+
   // Route pour obtenir la liste de tous les utilisateurs
   @Get()
   findAll() {
@@ -89,30 +88,6 @@ export class UsersController {
       // Handle errors and return an appropriate response
       throw new HttpException(
         'Failed to update user',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    try {
-      // Check if the user with the given 'id' exists
-      const existingUser = await this.usersService.getUserInfo(id);
-
-      if (!existingUser) {
-        throw new NotFoundException(`User with ID ${id} not found`);
-      }
-
-      // Remove the user from the database
-      await this.usersService.userRepository.delete(id);
-
-      // You can optionally return a success message
-      return `User with ID ${id} has been successfully removed`;
-    } catch (error) {
-      // Handle errors and return an appropriate response
-      throw new HttpException(
-        'Failed to remove user',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

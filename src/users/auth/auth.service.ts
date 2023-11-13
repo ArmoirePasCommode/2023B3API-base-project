@@ -7,6 +7,7 @@ import {
 import { UsersService } from '../users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as Argon2 from 'argon2';
+import { LoginUserDto } from '../dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,12 +16,14 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(username, pass) {
-    const user = await this.usersService.findByUsername(username);
-    if (!user || (await Argon2.verify(user.password, pass))) {
+  async signIn(dto: LoginUserDto) {
+    const user = await this.usersService.findByEmail(dto.email);
+    
+    if (!user || !(await Argon2.verify(user.password, dto.password))) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.id, username: user.username };
+
+    const payload = { sub: user.id };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
