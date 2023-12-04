@@ -44,12 +44,11 @@ export class UsersService {
 
 
   async getUserInfo(id: string): Promise<User | null> {
-    return await this.userRepository.findOne({ where: { id: id } });
+    return await this.userRepository.findOneBy( {id} );
   }
 
   async findAll() {
     const users = await this.userRepository.find();
-    console.log(users)
     return users;
   }
 
