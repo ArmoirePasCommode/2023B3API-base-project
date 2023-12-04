@@ -11,7 +11,7 @@ export class LoggingInterceptor implements NestInterceptor<User, any> {
       .handle()
       .pipe(
         map((u: User) => {
-            delete u.password
+            delete u?.password
             return u
         }),
       );
