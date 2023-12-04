@@ -22,11 +22,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { AuthService } from './auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
-import { LoggingInterceptor } from './interceptors/password.interceptors';
-import { AuthGuard, Public} from './auth/auth.guard';
-
+import { Public} from './auth/auth.guard';
+import  {Request as ExpressRequest} from 'express'
 @Controller('users')
-@UseInterceptors(LoggingInterceptor)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -45,29 +43,25 @@ export class UsersController {
   @Public()
   @Post('auth/login')
   async login(@Body() dto: LoginUserDto): Promise<{ access_token: string }> {
-    return this.authservice.signIn(dto)
+    const access_token = await this.authservice.signIn(dto)
+    return { access_token }
   }
-
-  // Route pour obtenir la liste de tous les utilisateurs
   
   @Get()
-  findAll() {
+  async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
+  @Get('/me')
+  async getMyUserInfo(@Request() req: ExpressRequest): Promise<User> {
+    return req.user as User;
+  }
   
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.getUserInfo(id);
   }
-  
-  @Get('/me')
-  getMyUserInfo(@Request() req) {
-    console.log('coucou')
-    return this.usersService.getUserInfo(req.user);
-  }
 
- 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     try {

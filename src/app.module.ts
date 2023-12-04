@@ -6,7 +6,8 @@ import { User } from './users/entities/user.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './users/auth/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './users/auth/constants';
+import { AuthModule } from './users/auth/auth.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -25,7 +26,7 @@ import { jwtConstants } from './users/auth/constants';
       inject: [ConfigService],
     }),
     UsersModule,
-    JwtModule.register(jwtConstants),
+    AuthModule
   ],
   controllers: [],
   providers: [
