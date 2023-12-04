@@ -14,6 +14,7 @@ import {
   NotFoundException,
   UsePipes,
   ValidationPipe,
+  ParseUUIDPipe,
   UseInterceptors, createParamDecorator, ExecutionContext
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -58,38 +59,9 @@ export class UsersController {
   }
   
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<User>{
-    const user= this.usersService.getUserInfo(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User>{
+    const user= await this.usersService.getUserInfo(id);
     if(!user) throw new NotFoundException();
     return user;
-  }
-
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    try {
-      // Check if the user with the given 'id' exists
-      const existingUser = await this.usersService.getUserInfo(id);
-
-      if (!existingUser) {
-        throw new NotFoundException(`User with ID ${id} not found`);
-      }
-
-      // Update the user's properties based on the updateUserDto
-      if (updateUserDto.username) {
-        existingUser.username = updateUserDto.username;
-      }
-      await this.usersService.userRepository.update(id, existingUser);
-
-      // Fetch the updated user from the database (optional, but recommended)
-      const updatedUser = await this.usersService.getUserInfo(id);
-
-      return updatedUser;
-    } catch (error) {
-      // Handle errors and return an appropriate response
-      throw new HttpException(
-        'Failed to update user',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
   }
 }
