@@ -4,7 +4,6 @@ import { UserRole } from '../entities/user.entity';
 export class CreateUserDto {
   @IsNotEmpty()
   @MinLength(3)
-   
   @IsString()
   username!: string;
 

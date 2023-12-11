@@ -1,10 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
 @Entity()
-export class Project {
+export class ProjectUser {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
   @Column()
-  name!: string;
+  startDate!: Date;
+  @Column()
+  endDate!: Date;
+  @Column()
+  projectId!: string;
   @Column('uuid')
-  referringEmployeeId!: string;
+  userId!: string;
 }

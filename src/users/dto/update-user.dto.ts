@@ -2,20 +2,20 @@
 import { IsString, IsOptional, IsEnum, IsEmail} from 'class-validator';
 
 export class UpdateUserDto {
-  @IsOptional() // Makes this field optional for updates
+  @IsOptional()
   @IsString()
   username?: string;
 
-  @IsOptional() // Makes this field optional for updates
+  @IsOptional()
   @IsString()
   @IsEmail()
   email?: string;
 
-  @IsOptional() // Makes this field optional for updates
+  @IsOptional()
   @IsString()
   password?: string;
 
-  @IsOptional() // Makes this field optional for updates
+  @IsOptional()
   @IsEnum(['Employee', 'Admin', 'ProjectManager'])
   role?: 'Employee' | 'Admin' | 'ProjectManager';
 
