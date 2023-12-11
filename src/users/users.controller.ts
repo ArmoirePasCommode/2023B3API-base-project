@@ -4,22 +4,15 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
-  UseGuards,
   Request,
-  HttpException,
-  HttpStatus,
   NotFoundException,
   UsePipes,
   ValidationPipe,
   ParseUUIDPipe,
-  UseInterceptors, createParamDecorator, ExecutionContext
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { AuthService } from './auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';

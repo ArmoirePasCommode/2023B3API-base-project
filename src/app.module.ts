@@ -5,10 +5,9 @@ import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './users/auth/auth.guard';
-import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from './users/auth/auth.module';
 import { ProjectsModule } from './projects/projects.module';
-import { ProjetUsersModule } from './projet-users/projet-users.module';
+import { ProjectUsersModule } from './project-users/project-users.module';
 
 @Module({
   imports: [
@@ -30,7 +29,7 @@ import { ProjetUsersModule } from './projet-users/projet-users.module';
     UsersModule,
     AuthModule,
     ProjectsModule,
-    ProjetUsersModule
+    ProjectUsersModule
   ],
   controllers: [],
   providers: [

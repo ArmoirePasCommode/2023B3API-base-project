@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ProjetUsersService } from './project-users.service';
-import { ProjetUsersController } from './project-users.controller';
+import { ProjectUsersService } from './project-users.service';
+import { ProjectUsersController } from './project-users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProjectUser } from './entities/projet-user.entity';
+import { ProjectUser } from './entities/project-user.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([ProjectUser])],
-  controllers: [ProjetUsersController],
-  providers: [ProjetUsersService],
-  exports: [ProjetUsersService]
+  controllers: [ProjectUsersController],
+  providers: [ProjectUsersService],
+  exports: [ProjectUsersService]
 })
-export class ProjetUsersModule {}
+export class ProjectUsersModule {}
