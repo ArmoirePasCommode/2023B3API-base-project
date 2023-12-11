@@ -12,18 +12,19 @@ export class ProjectUsersController {
   @Post()
   @UsePipes(new ValidationPipe())
   async createProjetUsers(@Body() createProjectUserDto: CreateProjectUserDto, @Request() req: ExpressRequest): Promise<ProjectUser> {
-    if user.role = employee => un
+    console.log(req.user);
+    
     return this.projectUsersService.create(createProjectUserDto);
   }
 
-  @Get()
-  async findAllForRole(): Promise<ProjectUser[]> {
-    return this.projectUsersService.findAllForRole();
-  }
+  // @Get()
+  // async findAllForRole(): Promise<ProjectUser[]> {
+  //   return this.projectUsersService.findAllForRole();
+  // }
 
-  @Get(:id)
-  async findByIdForRole(): Promise<ProjectUser[]> {
-    return this.projectUsersService.findByIdForRole();
-  } 
+  // @Get(:id)
+  // async findByIdForRole(): Promise<ProjectUser[]> {
+  //   return this.projectUsersService.findByIdForRole();
+  // } 
 
 }
