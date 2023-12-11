@@ -11,11 +11,11 @@ export class UpdateProjectUserDto {
   endDate?: Date;
 
   @IsOptional()
-  @IsUUID('4', { message: 'Invalid UUIDv4 format' })
+  @IsUUID('4')
   userId?: string;
 
   @IsOptional()
-  @IsUUID('4', { message: 'Invalid UUIDv4 format' })
+  @IsUUID('4')
   projectId?: string;
 }
 

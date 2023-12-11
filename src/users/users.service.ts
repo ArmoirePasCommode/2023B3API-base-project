@@ -43,7 +43,7 @@ export class UsersService {
 
 
   async getUserInfo(id: string): Promise<User | null> {
-    return await this.userRepository.findOneBy( {id} );
+    return await this.userRepository.findOneBy( { id } );
   }
 
   async findAll() {

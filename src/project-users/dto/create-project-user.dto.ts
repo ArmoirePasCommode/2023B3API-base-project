@@ -9,10 +9,10 @@ export class CreateProjectUserDto {
   endDate!: Date;
 
   @IsNotEmpty()
-  @IsUUID('4', { message: 'Invalid UUIDv4 format' })
+  @IsUUID('4') 
   userId!: string;
 
   @IsNotEmpty()
-  @IsUUID('4', { message: 'Invalid UUIDv4 format' })
+  @IsUUID('4')
   projectId!: string;
 }
