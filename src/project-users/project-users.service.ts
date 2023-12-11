@@ -36,12 +36,22 @@ export class ProjectUsersService {
       .where('pu.userId = :userId', { userId })
       .andWhere('(pu.startDate < :endDate AND pu.endDate > :startDate)', { startDate, endDate })
       .getOne();
-    console.log('ici');
     return !!conflictingAssignment;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} projetUser`;
+  async findOne(id: string): Promise<ProjectUser> {
+    return this.projectUserRepository.findOneBy({ id });
   }
+
+  async findId(idproject: string): Promise<string[]> {
+    const projectUsers = await this.projectUserRepository.find({
+      where: { projectId: idproject },
+      select: ['id'],
+    });
+  
+    return projectUsers.map((projectUser) => projectUser.id);
+  }
+  
+  
 
 }

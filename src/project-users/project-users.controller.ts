@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, ValidationPipe,
-  UsePipes, Request, UnauthorizedException, ConflictException, UseGuards  } from '@nestjs/common';
+  UsePipes, Request, UnauthorizedException, ConflictException, UseGuards, ParseUUIDPipe, Param  } from '@nestjs/common';
 import { ProjectUsersService } from './project-users.service';
 import { CreateProjectUserDto } from './dto/create-project-user.dto';
 import { ProjectUser } from './entities/project-user.entity';
@@ -8,7 +8,7 @@ import { User, UserRole } from '../users/entities/user.entity';
 import { AuthGuard } from '../users/auth/auth.guard';
 
 @UseGuards(AuthGuard)
-@Controller('project-users')
+@Controller('/project-users')
 export class ProjectUsersController {
   constructor(private readonly projectUsersService: ProjectUsersService) {}
 
@@ -29,7 +29,6 @@ export class ProjectUsersController {
   }
 
   @Get()
-  @UsePipes(new ValidationPipe())
   async findAllForRole(@Request() req: ExpressRequest): Promise<ProjectUser[]> {
     const __user = req.user as User;
     if (__user.role === UserRole.Employee){
@@ -39,9 +38,19 @@ export class ProjectUsersController {
     }
   }
 
-  // @Get(:id)
-  // async findByIdForRole(): Promise<ProjectUser[]> {
-  //   return this.projectUsersService.findByIdForRole();
-  // } 
+  @Get('/:id')
+  async findProjectUserById(@Param('id', ParseUUIDPipe) idproject: string, @Request() req: ExpressRequest): Promise<ProjectUser> {
+    const __user = req.user as User;
+    let test = false
+    if (__user.role === UserRole.Employee){
+      const tab = await this.projectUsersService.findId(idproject)
+      tab.forEach(element => {if (element === __user.id) test = true;
+      });
+      if( test )return this.projectUsersService.findOne(idproject);
+      else throw new UnauthorizedException();
+    } else {
+      return this.projectUsersService.findOne(idproject);
+    }
+  }
 
 }
