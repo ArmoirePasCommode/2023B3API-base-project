@@ -1,13 +1,16 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateProjectDto } from './create-project.dto';
-import { IsOptional, IsUUID, IsString } from 'class-validator';
+import { IsUUID, MinLength, IsNotEmpty } from 'class-validator';
 
 export class UpdateProjectDto extends PartialType(CreateProjectDto) {
-  @IsOptional()
-  @IsString()
-  name?: string;
+  @IsNotEmpty()
+  id!: string;
 
-  @IsOptional()
+  @IsNotEmpty()
+  @MinLength(3)
+  name!: string;
+
+  @IsNotEmpty()
   @IsUUID('4', { message: 'Invalid UUIDv4 format' })
   referringEmployeeId?: string;
 }
