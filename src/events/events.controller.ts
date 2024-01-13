@@ -2,7 +2,7 @@ import { Controller, Post, Body, ValidationPipe, UsePipes, Req, Get, Param, Unau
 import { EventsService } from './events.service';
 import { ProjectUsersService } from '../project-users/project-users.service';
 import { CreateEventDto } from './dto/create-event.dto';
-
+import { Event } from './entities/event.entity';
 
 @Controller('events')
 export class EventsController {
@@ -13,16 +13,16 @@ export class EventsController {
 
   @Post()
   @UsePipes(new ValidationPipe())
-  create(@Body() createEventDto: CreateEventDto, @Req() req) {
+  create(@Body() createEventDto: CreateEventDto, @Req() req):Promise<Event> {
     const userId = req.user.sub;
     return this.eventService.createEvent(userId, createEventDto);
   }
   @Get(':id')
-  getEvent(@Param('id') event: string) {
+  getEvent(@Param('id') event: string): Promise<Event> {
     return this.eventService.getEvent(event);
   }
   @Get()
-  getAll() {
+  getAll(): Promise<Event[]> {
     return this.eventService.getAll();
   }
  
