@@ -1,11 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProjectUserDto } from './dto/create-project-user.dto';
-import { UpdateProjectUserDto } from './dto/update-project-user.dto';
 import { ProjectUser } from './entities/project-user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindManyOptions, FindOneOptions } from 'typeorm';
-import { log } from 'console';
-import { Project } from '../projects/entities/project.entity';
+import { Repository, FindManyOptions, LessThanOrEqual, FindOneOptions, MoreThanOrEqual } from 'typeorm';
+
 @Injectable()
 export class ProjectUsersService {
   constructor(
@@ -62,9 +60,7 @@ export class ProjectUsersService {
     const projectUsers = await this.projectUserRepository.find({
       ...this.findWithRelations(['user', 'project']), 
       where: { id }
-    });
-    console.log(projectUsers);
-    
+    });    
     return projectUsers;
   }
 
@@ -114,6 +110,17 @@ export class ProjectUsersService {
       where: { userId, projectId }
     });
     return !!project;
+  }
+  // Vérifie si un manager est associé à un projet à une date donnée
+  async managerDate(userId: string, date: Date): Promise<ProjectUser> {
+    const manager = await this.projectUserRepository.findOne({
+      where: {
+        startDate: LessThanOrEqual(date),
+        endDate: MoreThanOrEqual(date),
+        project: { referringEmployeeId: userId }},
+      relations: ['project']
+    });
+    return manager;
   }
   
   private findWithRelations(relations: string[]): FindManyOptions<ProjectUser> {

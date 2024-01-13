@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Body, ValidationPipe,
-  UsePipes, Request, HttpCode, HttpStatus, UnauthorizedException, ConflictException, UseGuards, ParseUUIDPipe, Param, NotFoundException  } from '@nestjs/common';
+import { Controller, UsePipes, Get, Post, Body, ValidationPipe, HttpCode, HttpStatus, NotFoundException,
+  Request, UnauthorizedException, ConflictException, ParseUUIDPipe, Param  } from '@nestjs/common';
 import { ProjectUsersService } from './project-users.service';
 import { CreateProjectUserDto } from './dto/create-project-user.dto';
 import { ProjectUser } from './entities/project-user.entity';
-import  {Request as ExpressRequest} from 'express';
 import { User, UserRole } from '../users/entities/user.entity';
-import { AuthGuard } from '../users/auth/auth.guard';
+import { Project } from '../projects/entities/project.entity';
+import  {Request as ExpressRequest} from 'express';
+
 
 @Controller('/project-users')
 export class ProjectUsersController {
@@ -34,7 +35,7 @@ export class ProjectUsersController {
   }
 
   @Get()
-  async findAllForRole(@Request() req: ExpressRequest): Promise<ProjectUser[]> {
+  async findAllForRole(@Request() req: ExpressRequest): Promise<ProjectUser[]|Project[]> {
     const __user = req.user as User;
     if (__user.role === UserRole.Employee){
       const projectuser= await this.projectUsersService.getUserInfo(__user.id);
@@ -47,6 +48,7 @@ export class ProjectUsersController {
       if (projectuser == null) {
         throw new NotFoundException();
     }
+  
     return projectuser;
     }
   }
